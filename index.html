@@ -236,6 +236,39 @@
 <body>
 
     <header>
+        <!-- START OF LIVE TELEMETRY COMMAND BAR -->
+<div class="live-telemetry-bar" style="width: 95%; max-width: 1200px; margin: 20px auto; padding: 20px; border-radius: 8px; background: #111122; border: 2px solid #ff4d4d; box-shadow: 0 4px 15px rgba(255,77,77,0.2); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #ffffff;">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <span style="display: inline-block; width: 12px; height: 12px; background: #ff4d4d; border-radius: 50%; animation: emergencyPulse 1.5s infinite;"></span>
+        <h3 style="margin: 0; color: #ff4d4d; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">🔴 SYSTEM COMMAND: CRITICAL LIVE WEATHER & HYDROLOGY LINKS</h3>
+    </div>
+    <p style="margin: 0 0 16px 0; font-size: 14px; color: #cccccc; line-height: 1.5;">
+        Due to extreme rainfall saturation across Nepal, embedded third-party map widgets can be unstable or restricted. Use these validated national telemetry nodes to view real-time ground status immediately:
+    </p>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+        <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #0066cc; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #0052a3; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            🌊 Open Real-Time DHM River Gauge Map
+        </a>
+        <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #cc6600; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #a35200; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            🚧 Open Live NDRRMA Landslide & Highway Closures
+        </a>
+        <a href="https://imd.gov.in" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #22223b; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #4a4e69; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            🛰️ Open Live IMD South Asia Satellite Loop
+        </a>
+    </div>
+
+    <style>
+        @keyframes emergencyPulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.4; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+        .live-telemetry-bar a:hover { opacity: 0.9; transform: translateY(-1px); }
+    </style>
+</div>
+<!-- END OF LIVE TELEMETRY COMMAND BAR -->
+
         <!-- Real-Time Nepal Weather Radar Widget Container -->
 <div class="radar-widget-container" style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: sans-serif; background: #1a1a2e; border: 1px solid #2b2b4e;">
     <!-- Live Interactive Meteorological Stream Wrapper -->
