@@ -3,535 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal Real-Time Hydro-Meteorological & Emergency Dashboard</title>
+    <title>Nepal Emergency Telemetry Hub</title>
     <style>
         :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --primary: #1e3a8a;
-            --secondary: #3b82f6;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --success: #10b981;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
+            --bg-color: #0b0b16;
+            --card-bg: #14142b;
+            --accent-red: #ff4d4d;
+            --accent-blue: #0088ff;
+            --accent-orange: #ff9900;
+            --text: #ffffff;
+            --text-muted: #a0a0c0;
         }
-        
-        * {
-            box-sizing: border-box;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
             line-height: 1.6;
-            padding: 20px;
         }
-
         header {
-            background: linear-gradient(135deg, var(--primary), #0f172a);
-            color: white;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #1f1f45, #0b0b16);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-red);
         }
-
         header h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
-            display: flex;
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+            color: var(--text);
+        }
+        .live-indicator {
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid var(--accent-red);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--accent-red);
+            margin-top: 10px;
+            text-transform: uppercase;
         }
-
-        header p {
-            font-size: 14px;
-            opacity: 0.9;
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
         }
-
-        .alert-banner {
-            background-color: #fee2e2;
-            border-left: 5px solid var(--danger);
-            color: #991b1b;
-            padding: 12px 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
-            font-weight: 600;
-            font-size: 14px;
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.4; }
+            100% { transform: scale(0.9); opacity: 1; }
         }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            margin-bottom: 24px;
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
-
-        @media (min-width: 1024px) {
-            .grid {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
+        .command-box {
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent-red);
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(255, 77, 77, 0.15);
+            margin-bottom: 40px;
         }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--primary);
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 8px;
+        .command-box p {
+            color: var(--text-muted);
+            margin-top: 0;
+            font-size: 15px;
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .action-btn {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-
-        .filter-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
+        .action-btn:hover {
+            transform: translateY(-2px);
         }
-
-        select, input {
-            padding: 8px 12px;
-            border: 1px solid var(--border);
+        .btn-blue { background: #0052a3; border: 1px solid #0066cc; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3); }
+        .btn-orange { background: #a35200; border: 1px solid #cc6600; box-shadow: 0 4px 14px rgba(204, 102, 0, 0.3); }
+        .btn-dark { background: #22223b; border: 1px solid #4a4e69; box-shadow: 0 4px 14px rgba(74, 78, 105, 0.3); }
+        .btn-desc {
+            font-weight: normal;
+            font-size: 12px;
+            color: rgba(255,255,255,0.75);
+            margin-top: 4px;
+        }
+        .directory-box {
+            background-color: var(--card-bg);
+            border: 1px solid #2b2b4e;
+            border-radius: 12px;
+            padding: 25px;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 12px;
             border-radius: 6px;
-            font-size: 14px;
-            background: white;
-            outline: none;
+            border: 1px solid #4a4e69;
+            background: #0b0b16;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
         }
-
-        select:focus, input:focus {
-            border-color: var(--secondary);
-        }
-
-        table {
+        .contact-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
-            text-align: left;
         }
-
-        th, td {
+        .contact-table th, .contact-table td {
             padding: 12px;
-            border-bottom: 1px solid var(--border);
+            text-align: left;
+            border-bottom: 1px solid #2b2b4e;
         }
-
-        th {
-            background-color: var(--bg-color);
-            font-weight: 600;
+        .contact-table th {
+            background-color: #1f1f45;
+            color: var(--accent-blue);
         }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
+        .contact-table tr:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+        .hotline-badge {
+            background: rgba(0, 136, 255, 0.15);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 2px 8px;
             border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
-        .badge-success { background: #d1fae5; color: #065f46; }
-
-        .btn {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-        }
-
-        .directory-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .directory-item {
-            padding: 10px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .directory-item:last-child {
-            border-bottom: none;
-        }
-
-        .directory-info h4 {
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .directory-info p {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .live-links {
-            margin-top: 24px;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .live-links h3 {
-            font-size: 16px;
-            color: #1e40af;
-            margin-bottom: 8px;
-        }
-
-        .live-links ul {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        @media (min-width: 768px) {
-            .live-links ul {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .live-links a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .live-links a:hover {
-            text-decoration: underline;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- START OF LIVE TELEMETRY COMMAND BAR -->
-<div class="live-telemetry-bar" style="width: 95%; max-width: 1200px; margin: 20px auto; padding: 20px; border-radius: 8px; background: #111122; border: 2px solid #ff4d4d; box-shadow: 0 4px 15px rgba(255,77,77,0.2); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #ffffff;">
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-        <span style="display: inline-block; width: 12px; height: 12px; background: #ff4d4d; border-radius: 50%; animation: emergencyPulse 1.5s infinite;"></span>
-        <h3 style="margin: 0; color: #ff4d4d; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">🔴 SYSTEM COMMAND: CRITICAL LIVE WEATHER & HYDROLOGY LINKS</h3>
-    </div>
-    <p style="margin: 0 0 16px 0; font-size: 14px; color: #cccccc; line-height: 1.5;">
-        Due to extreme rainfall saturation across Nepal, embedded third-party map widgets can be unstable or restricted. Use these validated national telemetry nodes to view real-time ground status immediately:
-    </p>
-    
-    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-        <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #0066cc; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #0052a3; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            🌊 Open Real-Time DHM River Gauge Map
-        </a>
-        <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #cc6600; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #a35200; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            🚧 Open Live NDRRMA Landslide & Highway Closures
-        </a>
-        <a href="https://imd.gov.in" target="_blank" rel="noopener noreferrer" style="flex: 1; min-width: 250px; background: #22223b; color: #ffffff; padding: 14px; text-align: center; border-radius: 6px; text-decoration: none; font-weight: bold; border: 1px solid #4a4e69; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            🛰️ Open Live IMD South Asia Satellite Loop
-        </a>
-    </div>
-
-    <style>
-        @keyframes emergencyPulse {
-            0% { transform: scale(0.9); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.4; }
-            100% { transform: scale(0.9); opacity: 1; }
-        }
-        .live-telemetry-bar a:hover { opacity: 0.9; transform: translateY(-1px); }
-    </style>
-</div>
-<!-- END OF LIVE TELEMETRY COMMAND BAR -->
-
-        <!-- Real-Time Nepal Weather Radar Widget Container -->
-<div class="radar-widget-container" style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: sans-serif; background: #1a1a2e; border: 1px solid #2b2b4e;">
-    <!-- Live Interactive Meteorological Stream Wrapper -->
-    <div class="radar-frame-wrapper" style="position: relative; width: 100%; height: 500px;">
-        <iframe 
-            src="https://windy.com" 
-            name="live-nepal-radar"
-            title="Real-Time Nepal Weather Radar Network Stream"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-            scrolling="no" 
-            allowfullscreen>
-        </iframe>
-    </div>
-    <!-- Data Source Attribution and Real-Time Links -->
-    <div class="radar-footer" style="padding: 12px 16px; background: #111122; color: #a0a0c0; font-size: 13px; display: flex; justify-content: space-between; align-items: center; wrap: wrap; gap: 10px;">
-        <div>
-            <span style="display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;"></span>
-            <strong>Live Radar Stream Active</strong> (Centered over Nepal Baseline)
+        <h1>NEPAL MONSOON METEOROLOGICAL MATRIX</h1>
+        <div class="live-indicator">
+            <span class="pulse-dot"></span> Active Emergency Tracking Mode
         </div>
-        <div style="font-size: 12px;">
-            Verify telemetry directly via <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: none; font-weight: bold;">DHM Flood Forecasting</a> or <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: none; font-weight: bold;">NDRRMA BIPAD</a>
-        </div>
-    </div>
-    
-    <!-- CSS Animation for the Live Pulse Element -->
-    <style>
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 255, 136, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
-        }
-    </style>
-</div>
-
-        <h1>🇳🇵 Nepal Hydro-Meteorological Emergency Dashboard</h1>
-        <p>Simulation Framework for Monitoring High-Alert Monsoon Windows (Sept 24 - Sept 28). Switch tabs or filters to test emergency warning logic.</p>
     </header>
 
-    <div class="alert-banner">
-        ⚠️ ALERT SIMULATION ACTIVE: Continuous Bay of Bengal depression over Koshi, Bagmati, and Gandaki provinces. High risk of instantaneous flash floods and landslides.
-    </div>
-
-    <div class="grid">
-        <!-- Left Side: Basin Telemetry & Highways -->
-        <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div class="container">
+        
+        <!-- Live Action Telemetry Command Console -->
+        <div class="command-box">
+            <h2 style="margin: 0 0 8px 0; color: var(--accent-red); font-size: 20px; text-transform: uppercase;">⚠️ Validated Ground Telemetry Portal Links</h2>
+            <p>Embedded external maps are deactivated to safeguard layout integrity. Access the verified live databases running across Nepal directly via the primary response channels below:</p>
             
-            <!-- River Basin Monitor -->
-            <div class="card">
-                <div class="card-title">
-                    <span>🌊 River Basin Telemetry Threshold Simulator</span>
-                </div>
-                <div class="filter-group">
-                    <select id="basinFilter" onchange="filterBasins()">
-                        <option value="all">All River Basins</option>
-                        <option value="koshi">Koshi Basin</option>
-                        <option value="gandaki">Gandaki Basin</option>
-                        <option value="bagmati">Bagmati Basin</option>
-                        <option value="karnali">Karnali Basin</option>
-                        <option value="mahakali">Mahakali Basin</option>
-                    </select>
-                </div>
-                <table id="basinTable">
-                    <thead>
-                        <tr>
-                            <th>River / Tributary</th>
-                            <th>Station Location</th>
-                            <th>Current Level (m)</th>
-                            <th>Danger Mark (m)</th>
-                            <th>Status / Trigger</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-basin="bagmati">
-                            <td><b>Bagmati</b></td>
-                            <td>Gaur, Rautahat</td>
-                            <td>7.45</td>
-                            <td>7.00</td>
-                            <td><span class="badge badge-danger">Danger (Siren Triggered)</span></td>
-                        </tr>
-                        <tr data-basin="koshi">
-                            <td><b>Sunkoshi</b></td>
-                            <td>Kampughat</td>
-                            <td>6.10</td>
-                            <td>6.00</td>
-                            <td><span class="badge badge-danger">Danger (SMS Dispatched)</span></td>
-                        </tr>
-                        <tr data-basin="gandaki">
-                            <td><b>Trishuli</b></td>
-                            <td>Betrawati</td>
-                            <td>4.85</td>
-                            <td>5.00</td>
-                            <td><span class="badge badge-warning">Warning Threshold</span></td>
-                        </tr>
-                        <tr data-basin="koshi">
-                            <td><b>Arun</b></td>
-                            <td>Urawa</td>
-                            <td>5.20</td>
-                            <td>5.50</td>
-                            <td><span class="badge badge-warning">Warning Threshold</span></td>
-                        </tr>
-                        <tr data-basin="karnali">
-                            <td><b>West Seti</b></td>
-                            <td>Dipayal</td>
-                            <td>3.10</td>
-                            <td>6.50</td>
-                            <td><span class="badge badge-success">Normal</span></td>
-                        </tr>
-                        <tr data-basin="mahakali">
-                            <td><b>Mahakali</b></td>
-                            <td>Pancheshwar</td>
-                            <td>2.80</td>
-                            <td>5.00</td>
-                            <td><span class="badge badge-success">Normal</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Highway Blockade Tracker -->
-            <div class="card">
-                <div class="card-title">
-                    <span>🚧 National Highway Blockade Grid</span>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Highway Name / Code</th>
-                            <th>Critical Sector</th>
-                            <th>Obstruction Cause</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><b>Prithvi Highway (H04)</b></td>
-                            <td>Mugling - Kurintar</td>
-                            <td>Large-scale mudslide at km 112</td>
-                            <td><span class="badge badge-danger">Blocked / No Travel</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>B.P. Highway (H06)</b></td>
-                            <td>Khurkot - Nepalthok</td>
-                            <td>River cutting and soft debris flow</td>
-                            <td><span class="badge badge-danger">Blocked / No Travel</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>Tribhuvan Highway (H02)</b></td>
-                            <td>Naubise - Nagdhunga</td>
-                            <td>Minor rockfall; heavy traffic crawl</td>
-                            <td><span class="badge badge-warning">One-Way Open</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>Araniko Highway (H03)</b></td>
-                            <td>Dolalghat Sector</td>
-                            <td>Pre-emptive night travel restrictions</td>
-                            <td><span class="badge badge-warning">Restricted</span></td>
-                        </tr>
-                        <tr>
-                            <td><b>East-West Highway (H01)</b></td>
-                            <td>Narayanghat Woods</td>
-                            <td>Clear pavement conditions</td>
-                            <td><span class="badge badge-success">Fully Open</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="btn-grid">
+                <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" class="action-btn btn-blue">
+                    🌊 Open Real-Time DHM River Gauges
+                    <span class="btn-desc">Tracks live water spikes across all basins</span>
+                </a>
+                <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" class="action-btn btn-orange">
+                    🚧 Open Live NDRRMA Disaster Map
+                    <span class="btn-desc">Logs highway blockages & landslide events</span>
+                </a>
+                <a href="https://imd.gov.in" target="_blank" rel="noopener noreferrer" class="action-btn btn-dark">
+                    🛰️ Open Live IMD Satellite Loop
+                    <span class="btn-desc">Active South Asia cloud & storm tracking</span>
+                </a>
             </div>
         </div>
 
-        <!-- Right Side: Emergency Contact Directory -->
-        <div class="card">
-            <div class="card-title">
-                <span>📞 Emergency Contacts (DEOC Hub)</span>
-            </div>
-            <input type="text" id="directorySearch" placeholder="Search District or Hub..." onkeyup="searchDirectory()" style="width:100%; margin-bottom: 12px;">
-            <div class="directory-list" id="directoryList">
-                <div class="directory-item" data-name="national emergency operation centre neoc">
-                    <div class="directory-info">
-                        <h4>NEOC Central Desk</h4>
-                        <p>National Emergency Coordination</p>
-                    </div>
-                    <a href="tel:1149" class="btn">Call 1149</a>
-                </div>
-                <div class="directory-item" data-name="nepal police control">
-                    <div class="directory-info">
-                        <h4>Nepal Police Control</h4>
-                        <p>First Responder Incidents</p>
-                    </div>
-                    <a href="tel:100" class="btn">Call 100</a>
-                </div>
-                <div class="directory-item" data-name="armed police force apf">
-                    <div class="directory-info">
-                        <h4>Armed Police Force (APF)</h4>
-                        <p>Disaster Rescue Logistics</p>
-                    </div>
-                    <a href="tel:1114" class="btn">Call 1114</a>
-                </div>
-                <div class="directory-item" data-name="kathmandu deoc valley hub">
-                    <div class="directory-info">
-                        <h4>Kathmandu DEOC</h4>
-                        <p>Bagmati District Command</p>
-                    </div>
-                    <a href="tel:014262480" class="btn">Call Hub</a>
-                </div>
-                <div class="directory-item" data-name="chitwan deoc mugling sector">
-                    <div class="directory-info">
-                        <h4>Chitwan DEOC</h4>
-                        <p>Highway Mudslide Logistics</p>
-                    </div>
-                    <a href="tel:056521255" class="btn">Call Hub</a>
-                </div>
-                <div class="directory-item" data-name="rupandehi deoc lumbini zone">
-                    <div class="directory-info">
-                        <h4>Rupandehi DEOC</h4>
-                        <p>Downstream Plain Inundation</p>
-                    </div>
-                    <a href="tel:071520111" class="btn">Call Hub</a>
-                </div>
-                <div class="directory-item" data-name="kaski deoc pokhara">
-                    <div class="directory-info">
-                        <h4>Kaski DEOC (Pokhara)</h4>
-                        <p>Gandaki Torrential Response</p>
-                    </div>
-                    <a href="tel:061524314" class="btn">Call Hub</a>
-                </div>
-            </div>
+        <!-- Integrated Directory System -->
+        <div class="directory-box">
+            <h2 style="margin: 0 0 16px 0; color: var(--accent-blue); font-size: 20px;">📞 Searchable Emergency Directory</h2>
+            <input type="text" id="directorySearch" class="search-bar" onkeyup="filterDirectory()" placeholder="Type a district name or department (e.g. Kathmandu, Sindhupalchok, APF)...">
+            
+            <table class="contact-table" id="contactTable">
+                <thead>
+                    <tr>
+                        <th>Authority/Region</th>
+                        <th>Function</th>
+                        <th>Emergency Numbers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>National Emergency Operation Centre (NEOC)</strong></td>
+                        <td>Central Incident Operations Control</td>
+                        <td><span class="hotline-badge">1149</span> / 01-4200105</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nepal Police Headquarters</strong></td>
+                        <td>First Response & Search and Rescue</td>
+                        <td><span class="hotline-badge">100</span> / 01-4412780</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Armed Police Force (APF)</strong></td>
+                        <td>Disaster Response Fleet Command</td>
+                        <td><span class="hotline-badge">1114</span> / 01-5260193</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kathmandu District Control Desk</strong></td>
+                        <td>DEOC Control Center Branch</td>
+                        <td>01-4262448</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sindhupalchok District Operations</strong></td>
+                        <td>High-Risk Landslide Basin Desk</td>
+                        <td>011-620166</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kaski District Control Center</strong></td>
+                        <td>Gandaki Waterways Response Desk</td>
+                        <td>061-460346</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chitwan District Control Center</strong></td>
+                        <td>Narayani Downstream Warning Base</td>
+                        <td>056-521177</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
 
-    <!-- Live Verified Operational Links Section -->
-    <div class="live-links">
-        <h3>🔗 Switch to Official Ground-Truth Portals for Actual Emergency Events:</h3>
-        <ul>
-            <li><a href="https://fms.dhm.gov.np/" target="_blank">📡 Live DHM Flood Gauges</a></li>
-            <li><a href="https://bipad.gov.np/" target="_blank">🚧 Real Landslide Maps (BIPAD)</a></li>
-            <li><a href="https://mausam.imd.gov.in/" target="_blank">⛈️ Live INSAT-3D Clouds</a></li>
-        </ul>
     </div>
 
     <script>
-        function filterBasins() {
-            var val = document.getElementById("basinFilter").value;
-            var rows = document.querySelectorAll("#basinTable tbody tr");
-            rows.forEach(function(row) {
-                if(val === "all" || row.getAttribute("data-basin") === val) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        }
+        function filterDirectory() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("directorySearch");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("contactTable");
+            tr = table.getElementsByTagName("tr");
 
-        function searchDirectory() {
-            var query = document.getElementById("directorySearch").value.toLowerCase();
-            var items = document.querySelectorAll("#directoryList .directory-item");
-            items.forEach(function(item) {
-                var searchName = item.getAttribute("data-name");
-                if(searchName.indexOf(query) > -1) {
-                    item.style.display = "";
-                } else {
-                    item.style.display = "none";
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
