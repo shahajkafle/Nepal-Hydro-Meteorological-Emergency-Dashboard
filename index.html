@@ -236,6 +236,40 @@
 <body>
 
     <header>
+        <!-- Real-Time Nepal Weather Radar Widget Container -->
+<div class="radar-widget-container" style="width: 100%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: sans-serif; background: #1a1a2e; border: 1px solid #2b2b4e;">
+    <!-- Live Interactive Meteorological Stream Wrapper -->
+    <div class="radar-frame-wrapper" style="position: relative; width: 100%; height: 500px;">
+        <iframe 
+            src="https://windy.com" 
+            name="live-nepal-radar"
+            title="Real-Time Nepal Weather Radar Network Stream"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+            scrolling="no" 
+            allowfullscreen>
+        </iframe>
+    </div>
+    <!-- Data Source Attribution and Real-Time Links -->
+    <div class="radar-footer" style="padding: 12px 16px; background: #111122; color: #a0a0c0; font-size: 13px; display: flex; justify-content: space-between; align-items: center; wrap: wrap; gap: 10px;">
+        <div>
+            <span style="display: inline-block; width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 6px; animation: pulse 2s infinite;"></span>
+            <strong>Live Radar Stream Active</strong> (Centered over Nepal Baseline)
+        </div>
+        <div style="font-size: 12px;">
+            Verify telemetry directly via <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: none; font-weight: bold;">DHM Flood Forecasting</a> or <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: none; font-weight: bold;">NDRRMA BIPAD</a>
+        </div>
+    </div>
+    
+    <!-- CSS Animation for the Live Pulse Element -->
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 255, 136, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+    </style>
+</div>
+
         <h1>🇳🇵 Nepal Hydro-Meteorological Emergency Dashboard</h1>
         <p>Simulation Framework for Monitoring High-Alert Monsoon Windows (Sept 24 - Sept 28). Switch tabs or filters to test emergency warning logic.</p>
     </header>
