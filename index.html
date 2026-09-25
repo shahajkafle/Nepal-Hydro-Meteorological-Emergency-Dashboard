@@ -3,235 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nepal Monsoon Simulation & Emergency Telemetry Hub</title>
-    <style>
-        :root {
-            --bg-color: #080810;
-            --card-bg: #111126;
-            --accent-red: #ff3e3e;
-            --accent-orange: #ff9f1c;
-            --accent-green: #2ec4b6;
-            --accent-blue: #0077ff;
-            --text: #ffffff;
-            --text-muted: #8e9aaf;
-        }
-        body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background: linear-gradient(180deg, #161633 0%, #080810 100%);
-            padding: 30px 20px;
-            text-align: center;
-            border-bottom: 2px solid var(--accent-red);
-        }
-        h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; }
-        .system-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(46, 196, 182, 0.1);
-            border: 1px solid var(--accent-green);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--accent-green);
-            margin-top: 12px;
-        }
-        .pulse {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            animation: pulseGlow 1.8s infinite;
-        }
-        @keyframes pulseGlow {
-            0% { transform: scale(0.9); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.3; }
-            100% { transform: scale(0.9); opacity: 1; }
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; }
-        }
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid #1f1f45;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            margin-bottom: 20px;
-        }
-        .full-width { grid-column: 1 / -1; }
-        .card-title {
-            font-size: 18px;
-            margin-top: 0;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-        .metric-tile {
-            background: #171735;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid var(--accent-blue);
-        }
-        .metric-val { font-size: 24px; font-weight: bold; margin: 5px 0; color: #fff; }
-        .metric-lbl { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
-        
-        /* Map Canvas Simulation Styling */
-        #mapSimulation {
-            background: #0d0d1d;
-            border: 1px solid #252552;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 15px;
-            min-height: 350px;
-        }
-        .radar-wave {
-            position: absolute;
-            border: 2px solid rgba(0, 119, 255, 0.4);
-            background: rgba(0, 119, 255, 0.03);
-            border-radius: 50%;
-            animation: ripple 6s infinite linear;
-            pointer-events: none;
-        }
-        @keyframes ripple {
-            0% { width: 0px; height: 0px; opacity: 0; top: 70%; left: 60%; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.1; }
-            100% { width: 800px; height: 800px; opacity: 0; top: 20%; left: 20%; }
-        }
-        .map-overlay-text {
-            position: relative;
-            z-index: 5;
-            background: rgba(11, 11, 22, 0.85);
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #222244;
-            max-width: 320px;
-        }
-        .btn {
-            background: var(--accent-blue);
-            color: #white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 13px;
-        }
-        .btn-danger { background: var(--accent-red); }
-        .search-input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #252552;
-            background: #080810;
-            color: white;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #1f1f45; }
-        th { background-color: #161633; color: var(--accent-blue); }
-        .badge {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .bg-danger { background: rgba(255,62,62,0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
-        .bg-warning { background: rgba(255,159,28,0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
-        .bg-safe { background: rgba(46,196,182,0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
-    </style>
+    <title>Nepal Monsoon & Cascading Disaster Monitoring Portal</title>
+    <!-- Tailwind CSS for modern, scannable layout -->
+    <script src="https://jsdelivr.net"></script>
+    <!-- Lucide Icons for visual anchors -->
+    <script src="https://unpkg.com"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased">
 
-    <header>
-        <h1>NEPAL EMERGENCY WEATHER SIMULATION ENGINE</h1>
-        <div class="system-status">
-            <span class="pulse"></span> Chrono-Telemetry Stream Active
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <div class="flex items-center gap-2 text-rose-500 font-semibold tracking-wider text-xs uppercase animate-pulse">
+                <i data-lucide="radio" class="w-4 h-4"></i> Live Monitoring Active (Sept 24–28 Window)
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight text-white mt-1">Nepal Cascading Disaster Portal</h1>
+            <p class="text-slate-400 text-sm">Real-time tracking of Rain, River Hydrology, and Landslide Logistics</p>
+        </div>
+        <div class="flex gap-3 text-xs bg-slate-800 border border-slate-700 p-2 rounded-lg">
+            <div class="text-slate-400">System Time: <span id="clock" class="font-mono text-slate-200">Loading...</span></div>
         </div>
     </header>
 
-    <div class="container">
-        
-        <!-- Simulation Framework Overview -->
-        <div class="card full-width">
-            <div class="card-title">
-                <span>☔ Time-Variant Monsoon Saturation Dashboard</span>
-                <span style="font-size: 13px; color: var(--text-muted);" id="liveTimestamp">Loading system time...</span>
-            </div>
-            <div class="grid-3">
-                <div class="metric-tile" style="border-left-color: var(--accent-red);">
-                    <div class="metric-lbl">Est. Depression System Center</div>
-                    <div class="metric-val" id="stormCenter">Janakpur Sector</div>
-                </div>
-                <div class="metric-tile" style="border-left-color: var(--accent-orange);">
-                    <div class="metric-lbl">Avg. 24h Basin Precipitation</div>
-                    <div class="metric-val" id="avgPrecip">142.5 mm</div>
-                </div>
-                <div class="metric-tile" style="border-left-color: var(--accent-green);">
-                    <div class="metric-lbl">System Risk Coefficient</div>
-                    <div class="metric-val" id="riskCoeff">8.4 / 10</div>
-                </div>
-            </div>
-        </div>
+    <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
 
-        <!-- Dynamic Visualization Canvas Block -->
-        <div class="card">
-            <div class="card-title">🛰️ Simulated Atmospheric Radar Layer</div>
-            <div id="mapSimulation">
-                <div class="radar-wave"></div>
-                <div class="map-overlay-text">
-                    <div style="font-weight:bold; color:var(--accent-red); margin-bottom:5px;">⚠️ Bay of Bengal System Trajectory</div>
-                    <div style="font-size:12px; color:var(--text-muted); line-height:1.4;">
-                        Deep atmospheric moisture vortex is interacting directly with the steep topography of the Bagmati and Koshi hill regions. High convective clouds detected.
+        <!-- Quick Metrics Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-800 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-blue-500/10 text-blue-400 rounded-lg"><i data-lucide="cloud-rain" class="w-6 h-6"></i></div>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase text-slate-400">Storm Tracking</h3>
+                    <p class="text-lg font-bold mt-1 text-white">IMD / HIWAT</p>
+                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1"><i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> 15-30 Min Cycles</span>
+                </div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-cyan-500/10 text-cyan-400 rounded-lg"><i data-lucide="waves" class="w-6 h-6"></i></div>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase text-slate-400">River Telemetry</h3>
+                    <p class="text-lg font-bold mt-1 text-white">DHM Flood Portal</p>
+                    <span class="text-[11px] text-emerald-400 flex items-center gap-1 mt-1"><i data-lucide="refresh-cw" class="w-3 h-3 animate-spin"></i> Hourly Updates</span>
+                </div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-amber-500/10 text-amber-400 rounded-lg"><i data-lucide="mountain" class="w-6 h-6"></i></div>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase text-slate-400">Landslide Activity</h3>
+                    <p class="text-lg font-bold mt-1 text-white">BIPAD / LHASA</p>
+                    <span class="text-[11px] text-amber-400 flex items-center gap-1 mt-1"><i data-lucide="alert-circle" class="w-3 h-3"></i> Continuous Log</span>
+                </div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700/60 p-4 rounded-xl shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-rose-500/10 text-rose-400 rounded-lg"><i data-lucide="shield-alert" class="w-6 h-6"></i></div>
+                <div>
+                    <h3 class="text-xs font-semibold uppercase text-slate-400">Travel Restrictions</h3>
+                    <p class="text-lg font-bold mt-1 text-white">NEOC / TAAN</p>
+                    <span class="text-[11px] text-rose-400 flex items-center gap-1 mt-1"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Dynamic Bans</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Live-Data Workspace Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left 2 Columns: Embedded Viewports -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Interactive Embed Container -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg">
+                    <div class="bg-slate-850 px-4 py-3 border-b border-slate-700 flex justify-between items-center flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="monitor-play" class="w-5 h-5 text-indigo-400"></i>
+                            <h2 class="font-bold text-sm text-white" id="viewport-title">Live Feed: RainViewer Global Composite</h2>
+                        </div>
+                        <div class="flex flex-wrap gap-1 bg-slate-900 p-1 rounded-lg border border-slate-700 text-xs">
+                            <button onclick="switchFeed('rainviewer', 'https://rainviewer.com', 'Live Feed: RainViewer Global Composite')" class="feed-btn px-2.5 py-1 rounded bg-indigo-600 text-white font-medium transition">RainViewer</button>
+                            <button onclick="switchFeed('earthwind', 'https://nullschool.net', 'Live Feed: EarthWindMap (Nepal Context)')" class="feed-btn px-2.5 py-1 rounded text-slate-400 hover:text-white transition">EarthWindMap</button>
+                            <button onclick="switchFeed('bipad', 'https://bipadportal.gov.np', 'Official Portal: NDRRMA BIPAD System')" class="feed-btn px-2.5 py-1 rounded text-slate-400 hover:text-white transition">BIPAD Portal</button>
+                        </div>
+                    </div>
+                    <!-- Responsive Iframe Wrapper -->
+                    <div class="relative w-full h-[500px] bg-slate-950">
+                        <iframe id="live-viewport" src="https://rainviewer.com" class="absolute top-0 left-0 w-full h-full border-0" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-3 bg-slate-850 text-xs text-slate-400 border-t border-slate-700 flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 flex-shrink-0 text-slate-400"></i>
+                        <span>If an official frame restricts embedding due to mixed-content or CORS safety rules, use the <strong>Data Routing Panel</strong> on the right to open portals directly in secure windows.</span>
                     </div>
                 </div>
-                <div style="z-index: 5; margin-top: auto; display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <span style="font-size:11px; color:var(--text-muted);">Simulation Layer: Doppler Radar Variant</span>
-                    <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" class="btn">Launch Real DHM Portal Link</a>
-                </div>
-            </div>
-        </div>
 
-        <!-- Real Telemetry Ground Redirects -->
-        <div class="card">
-            <div class="card-title">🚨 Operations Command Center</div>
-            <p style="font-size: 13px; color: var(--text-muted); margin-top:0;">If you are executing tactical field plans or logistics deployments right now, click below to open the real government crisis channels:</p>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" class="btn btn-danger" style="text-align:center;">🚧 Open Real NDRRMA Landslide Matrix</a>
-                <a href="https://imd.gov.in" target="_blank" rel="noopener noreferrer" class="btn" style="background:#333; text-align:center;">🛰️ Open Real IMD INSAT Satellite Loop</a>
-            </div>
-            <div style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; font-size:12px; color: var(--text-muted);">
-                <strong>Central Crisis Helpline:</strong> Dial <span style="color:var(--accent-red); font-weight:bold;">1149</span> from any local phone to reach the National Emergency Operation Centre directly.
-            </div>
-        </div>
-
-        <!-- Multi-Basin Hydro System Simulation Table -->
-        <div class="card full-width">
+                <!-- Core Monitoring Matrix -->
+                <div class="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden shadow-lg">
+                    <div class="px-4 py-3 border-b border-slate-700 flex items-center gap-2">
+                        <i data-lucide="table" class="w-5 h-5 text-emerald-400"></i>
+                        <h2 class="font-bold text-sm text-white">Real-Time Operational Monitoring Grid</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-850 text-slate-300 font-semibold border-b border-slate-700">
+                                    <th class="p-3">Metric to Monitor</th>
+                                    <th class="p-3">Source System</th>
+                                    <th class="p-3">Update Frequency</th>
+                                    <th class="p-3">Target Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-700 text-slate-300">
+                                <tr class="hover:bg-slate-750 transition">
+                                    <td class="p-3 font-medium text-white flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>Storm Tracking & Rain Intensity</td>
+                                    <td class="p-3 text-slate-400">IMD Satellites / NASA HIWAT</td>
+                                    <td class="p-3">Every 15–30 Mins</td>
+                                    <td class="p-3">Track low-pressure movement & cloud density</td>
+                                </tr>
+                                <tr class="hover:bg-slate-750 transition">
+                                    <td class="p-3 font-medium text-white flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>River Discharge & Water Levels</td>
+                                    <td class="p-3 text-slate-400">DHM Flood Portal</td>
+                                    <td class="p-3">Hourly</td>
+                                    <td class="p-3 text-rose-300 font-medium">Catch flash flood spikes before settlement impact</td>
+                                </tr>
+                                <tr class="hover:bg-slate-750 transition">
+                                    <td class="p-3 font-medium text-white flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Landslide Failures & Blockages</td>
+                                    <td class="p-3 text-slate-400">BIPAD Portal / NASA LHASA</td>
+                                    <td class="p-3">Continuous / Event-driven</td>
+                                    <td class="p-3">Identify blocked highways and isolated villages</td>
+                                </tr>
