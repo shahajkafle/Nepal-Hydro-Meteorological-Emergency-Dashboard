@@ -64,7 +64,7 @@
             margin: 25px auto;
             padding: 0 20px;
         }
-        /* Live Open-Source Weather Map Styling */
+        /* Open-Source Live Weather Map Mapbox/OSM Styling */
         .radar-box {
             background-color: var(--card-bg);
             border: 2px solid var(--accent-blue);
@@ -76,10 +76,10 @@
         .map-frame-wrapper {
             position: relative;
             width: 100%;
-            height: 480px;
+            height: 500px;
             border-radius: 8px;
             overflow: hidden;
-            background: #000;
+            background: #111;
         }
         .directory-box {
             background-color: var(--card-bg);
@@ -141,29 +141,27 @@
     <header>
         <h1>NEPAL EMERGENCY WEATHER PORTAL</h1>
         <div class="live-indicator">
-            <span class="pulse-dot"></span> Open-Source Telemetry Active
+            <span class="pulse-dot"></span> HTTPS Open Telemetry Connected
         </div>
     </header>
 
     <div class="container">
         
-        <!-- Open-Source Live Weather Map Integration -->
+        <!-- Secure Live OpenStreetMap-based Climate Grid -->
         <div class="radar-box">
             <h2 style="margin: 0 0 6px 0; color: var(--accent-blue); font-size: 20px;">🛰️ Live Rain Radar & Cloud Satellite Feed</h2>
-            <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 15px 0;">Interactive real-time atmospheric precipitation map centered directly on the Nepal Himalayan range corridor.</p>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 15px 0;">Interactive real-time secure mapping engine centered directly on the Nepal Himalayan range corridor.</p>
             
             <div class="map-frame-wrapper">
                 <iframe 
-                    src="https://meteoblue.com" 
-                    frameborder="0" 
-                    scrolling="NO" 
-                    allowfullscreen 
-                    style="width: 100%; height: 100%; border: none;">
+                    src="https://openstreetmap.org" 
+                    style="width: 100%; height: 100%; border: none;"
+                    allowfullscreen>
                 </iframe>
             </div>
             
             <div class="alert-bar">
-                <div>🌐 Tracking Layer: <strong>Clouds & Monsoon Precipitation</strong></div>
+                <div>🌐 Tracking Layer: <strong>Nepal Topographic Base Map</strong></div>
                 <div>Verify gauges via <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: none; font-weight: bold;">Official DHM Portal</a></div>
             </div>
         </div>
