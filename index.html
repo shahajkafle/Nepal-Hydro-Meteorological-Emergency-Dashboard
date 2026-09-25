@@ -10,7 +10,7 @@
             --card-bg: #14142b;
             --accent-red: #ff4d4d;
             --accent-blue: #0088ff;
-            --accent-orange: #ff9900;
+            --accent-green: #00ff88;
             --text: #ffffff;
             --text-muted: #a0a0c0;
         }
@@ -24,34 +24,33 @@
         }
         header {
             background: linear-gradient(135deg, #1f1f45, #0b0b16);
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             border-bottom: 3px solid var(--accent-red);
         }
         header h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 26px;
             letter-spacing: 1px;
-            color: var(--text);
         }
         .live-indicator {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(255, 77, 77, 0.15);
-            border: 1px solid var(--accent-red);
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid var(--accent-green);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: bold;
-            color: var(--accent-red);
+            color: var(--accent-green);
             margin-top: 10px;
             text-transform: uppercase;
         }
         .pulse-dot {
             width: 10px;
             height: 10px;
-            background-color: var(--accent-red);
+            background-color: var(--accent-green);
             border-radius: 50%;
             animation: pulse 1.5s infinite;
         }
@@ -62,54 +61,25 @@
         }
         .container {
             max-width: 1100px;
-            margin: 30px auto;
+            margin: 25px auto;
             padding: 0 20px;
         }
-        .command-box {
+        /* Live Open-Source Weather Map Styling */
+        .radar-box {
             background-color: var(--card-bg);
-            border: 2px solid var(--accent-red);
+            border: 2px solid var(--accent-blue);
             border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 24px rgba(255, 77, 77, 0.15);
-            margin-bottom: 40px;
-        }
-        .command-box p {
-            color: var(--text-muted);
-            margin-top: 0;
-            font-size: 15px;
-        }
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 136, 255, 0.15);
+            margin-bottom: 30px;
+        }
+        .map-frame-wrapper {
+            position: relative;
+            width: 100%;
+            height: 480px;
             border-radius: 8px;
-            text-decoration: none;
-            color: var(--text);
-            font-weight: bold;
-            font-size: 16px;
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-        .btn-blue { background: #0052a3; border: 1px solid #0066cc; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3); }
-        .btn-orange { background: #a35200; border: 1px solid #cc6600; box-shadow: 0 4px 14px rgba(204, 102, 0, 0.3); }
-        .btn-dark { background: #22223b; border: 1px solid #4a4e69; box-shadow: 0 4px 14px rgba(74, 78, 105, 0.3); }
-        .btn-desc {
-            font-weight: normal;
-            font-size: 12px;
-            color: rgba(255,255,255,0.75);
-            margin-top: 4px;
+            overflow: hidden;
+            background: #000;
         }
         .directory-box {
             background-color: var(--card-bg);
@@ -153,44 +123,57 @@
             border-radius: 4px;
             font-weight: bold;
         }
+        .alert-bar {
+            background: #1a1a3a;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>NEPAL MONSOON METEOROLOGICAL MATRIX</h1>
+        <h1>NEPAL EMERGENCY WEATHER PORTAL</h1>
         <div class="live-indicator">
-            <span class="pulse-dot"></span> Active Emergency Tracking Mode
+            <span class="pulse-dot"></span> Open-Source Telemetry Active
         </div>
     </header>
 
     <div class="container">
         
-        <!-- Live Action Telemetry Command Console -->
-        <div class="command-box">
-            <h2 style="margin: 0 0 8px 0; color: var(--accent-red); font-size: 20px; text-transform: uppercase;">⚠️ Validated Ground Telemetry Portal Links</h2>
-            <p>Embedded external maps are deactivated to safeguard layout integrity. Access the verified live databases running across Nepal directly via the primary response channels below:</p>
+        <!-- Open-Source Live Weather Map Integration -->
+        <div class="radar-box">
+            <h2 style="margin: 0 0 6px 0; color: var(--accent-blue); font-size: 20px;">🛰️ Live Rain Radar & Cloud Satellite Feed</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 15px 0;">Interactive real-time atmospheric precipitation map centered directly on the Nepal Himalayan range corridor.</p>
             
-            <div class="btn-grid">
-                <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" class="action-btn btn-blue">
-                    🌊 Open Real-Time DHM River Gauges
-                    <span class="btn-desc">Tracks live water spikes across all basins</span>
-                </a>
-                <a href="https://bipad.gov.np" target="_blank" rel="noopener noreferrer" class="action-btn btn-orange">
-                    🚧 Open Live NDRRMA Disaster Map
-                    <span class="btn-desc">Logs highway blockages & landslide events</span>
-                </a>
-                <a href="https://imd.gov.in" target="_blank" rel="noopener noreferrer" class="action-btn btn-dark">
-                    🛰️ Open Live IMD Satellite Loop
-                    <span class="btn-desc">Active South Asia cloud & storm tracking</span>
-                </a>
+            <div class="map-frame-wrapper">
+                <iframe 
+                    src="https://meteoblue.com" 
+                    frameborder="0" 
+                    scrolling="NO" 
+                    allowfullscreen 
+                    style="width: 100%; height: 100%; border: none;">
+                </iframe>
+            </div>
+            
+            <div class="alert-bar">
+                <div>🌐 Tracking Layer: <strong>Clouds & Monsoon Precipitation</strong></div>
+                <div>Verify gauges via <a href="https://dhm.gov.np" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue); text-decoration: none; font-weight: bold;">Official DHM Portal</a></div>
             </div>
         </div>
 
-        <!-- Integrated Directory System -->
+        <!-- Integrated Searchable Directory System -->
         <div class="directory-box">
-            <h2 style="margin: 0 0 16px 0; color: var(--accent-blue); font-size: 20px;">📞 Searchable Emergency Directory</h2>
-            <input type="text" id="directorySearch" class="search-bar" onkeyup="filterDirectory()" placeholder="Type a district name or department (e.g. Kathmandu, Sindhupalchok, APF)...">
+            <h2 style="margin: 0 0 6px 0; color: var(--accent-red); font-size: 20px;">📞 National First Responders & Regional DEOC Directory</h2>
+            <p style="color: var(--text-muted); font-size: 14px; margin: 0 0 15px 0;">Instantly look up operational emergency hotlines for central units and landslide-prone river basin districts.</p>
+            
+            <input type="text" id="directorySearch" class="search-bar" onkeyup="filterDirectory()" placeholder="Type to search... (e.g. Kathmandu, Sindhupalchok, APF, Police)">
             
             <table class="contact-table" id="contactTable">
                 <thead>
@@ -251,9 +234,17 @@
             tr = table.getElementsByTagName("tr");
 
             for (i = 1; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
+                td = tr[i].getElementsByTagName("td");
                 if (td) {
                     txtValue = td.textContent || td.innerText;
                     if (txtValue.toUpperCase().indexOf(filter) > -1) {
                         tr[i].style.display = "";
                     } else {
+                        tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+    </script>
+</body>
+</html>
